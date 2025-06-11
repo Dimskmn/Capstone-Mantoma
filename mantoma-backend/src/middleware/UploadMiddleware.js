@@ -1,5 +1,5 @@
-const path = require('path');
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 
 // Middleware to handle image upload
 const uploadMiddleware = (req, res, next) => {
@@ -8,18 +8,18 @@ const uploadMiddleware = (req, res, next) => {
     if (!req.files || !req.files.image) {
       return res.status(400).json({
         success: false,
-        message: 'No image file uploaded. Please select a file.'
+        message: "No image file uploaded. Please select a file.",
       });
     }
 
     const uploadedFile = req.files.image;
 
     // Check file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
     if (!allowedTypes.includes(uploadedFile.mimetype)) {
       return res.status(400).json({
         success: false,
-        message: `Unsupported file type (${uploadedFile.mimetype}). Only JPEG, PNG, and WebP are allowed.`
+        message: `Unsupported file type (${uploadedFile.mimetype}). Only JPEG, PNG, and WebP are allowed.`,
       });
     }
 
@@ -31,14 +31,14 @@ const uploadMiddleware = (req, res, next) => {
       const fileSizeMB = (uploadedFile.size / (1024 * 1024)).toFixed(2);
       return res.status(413).json({
         success: false,
-        message: `File too large (${fileSizeMB}MB). Max allowed size is 10MB.`
+        message: `File too large (${fileSizeMB}MB). Max allowed size is 10MB.`,
       });
     }
 
     if (uploadedFile.size < minSize) {
       return res.status(400).json({
         success: false,
-        message: 'File too small. Minimum size is 1KB. Use a valid image.'
+        message: "File too small. Minimum size is 1KB. Use a valid image.",
       });
     }
 
@@ -49,7 +49,7 @@ const uploadMiddleware = (req, res, next) => {
     const fileName = `leaf_${timestamp}_${randomString}${fileExtension}`;
 
     // Set destination path
-    const uploadsDir = path.join(__dirname, '../uploads');
+    const uploadsDir = path.join(__dirname, "../uploads");
     const uploadPath = path.join(uploadsDir, fileName);
 
     // Create uploads directory if not exists
@@ -58,19 +58,19 @@ const uploadMiddleware = (req, res, next) => {
     }
 
     // Log file info
-    console.log('Uploading file:', {
+    console.log("Uploading file:", {
       originalName: uploadedFile.name,
       size: `${(uploadedFile.size / 1024).toFixed(2)} KB`,
-      type: uploadedFile.mimetype
+      type: uploadedFile.mimetype,
     });
 
     // Move file to uploads folder
     uploadedFile.mv(uploadPath, (err) => {
       if (err) {
-        console.error('File move error:', err);
+        console.error("File move error:", err);
         return res.status(500).json({
           success: false,
-          message: 'Failed to save the uploaded file. Please try again.'
+          message: "Failed to save the uploaded file. Please try again.",
         });
       }
 
@@ -81,19 +81,18 @@ const uploadMiddleware = (req, res, next) => {
         path: uploadPath,
         size: uploadedFile.size,
         mimetype: uploadedFile.mimetype,
-        url: `/uploads/${fileName}`
+        url: `/uploads/${fileName}`,
       };
 
       console.log(`File uploaded: ${fileName}`);
       next();
     });
-
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error("Upload error:", error);
     res.status(500).json({
       success: false,
-      message: 'Upload processing failed.',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      message: "Upload processing failed.",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };

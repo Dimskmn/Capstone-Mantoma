@@ -74,10 +74,11 @@ const tomatoDiseaseConfig = {
     Healthy: {
       disease: "Tanaman Sehat",
       status: "healthy",
-      description: "Daun tomat dalam kondisi sehat. Tidak ada penyakit yang terdeteksi. Lanjutkan perawatan yang baik untuk menjaga kesehatan tanaman.",
+      description:
+        "Daun tomat dalam kondisi sehat. Tidak ada penyakit yang terdeteksi. Lanjutkan perawatan yang baik untuk menjaga kesehatan tanaman.",
       maintenance: [
         "Siram secara rutin tanpa berlebihan",
-        "Pastikan mendapat sinar matahari 6-8 jam sehari", 
+        "Pastikan mendapat sinar matahari 6-8 jam sehari",
         "Berikan pupuk organik secara teratur",
         "Pantau kondisi tanaman secara berkala",
         "Jaga kebersihan area tanam dari gulma",
@@ -86,7 +87,7 @@ const tomatoDiseaseConfig = {
         "Penyiraman teratur",
         "Sinar matahari 6-8 jam",
         "Pupuk organik",
-        "Pemeriksaan rutin", 
+        "Pemeriksaan rutin",
         "Area tanam bersih",
       ],
       treatment: [
@@ -189,10 +190,7 @@ const tomatoDiseaseConfig = {
         "Daun mengering dan gugur",
         "Buah terdapat luka coklat",
       ],
-      treatment: [
-        "Gunakan fungisida",
-        "Buang bagian tanaman yang sakit",
-      ],
+      treatment: ["Gunakan fungisida", "Buang bagian tanaman yang sakit"],
       prevention: [
         "Jaga kebersihan kebun",
         "Rotasi tanaman",
@@ -329,29 +327,33 @@ const tomatoDiseaseConfig = {
     validateMLSync: function (mlClassNames) {
       const configClasses = this.classes;
       const differences = [];
-      
+
       // Check if arrays have same length
       if (mlClassNames.length !== configClasses.length) {
-        differences.push(`Length mismatch: ML has ${mlClassNames.length}, Config has ${configClasses.length}`);
+        differences.push(
+          `Length mismatch: ML has ${mlClassNames.length}, Config has ${configClasses.length}`
+        );
       }
-      
+
       // Check each class name
       mlClassNames.forEach((mlClass, index) => {
         if (configClasses[index] !== mlClass) {
-          differences.push(`Index ${index}: ML="${mlClass}" vs Config="${configClasses[index]}"`);
+          differences.push(
+            `Index ${index}: ML="${mlClass}" vs Config="${configClasses[index]}"`
+          );
         }
       });
-      
+
       // Check if all ML classes have disease data
-      mlClassNames.forEach(mlClass => {
+      mlClassNames.forEach((mlClass) => {
         if (!this.diseaseDatabase[mlClass]) {
           differences.push(`Missing disease data for ML class: ${mlClass}`);
         }
       });
-      
+
       return {
         isSync: differences.length === 0,
-        differences: differences
+        differences: differences,
       };
     },
   },
